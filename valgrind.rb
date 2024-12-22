@@ -4,7 +4,10 @@ class Valgrind < Formula
   license "GPL-2.0-only"
 
   head do
-    url "https://github.com/LouisBrunner/valgrind-macos.git", branch: "main"
+    if (OS.mac? and Hardware::CPU.arm?)
+      then url "https://github.com/LouisBrunner/valgrind-macos.git", branch: "feature/m1" 
+      else url "https://github.com/LouisBrunner/valgrind-macos.git", branch: "main"
+    end
 
     depends_on "autoconf" => :build
     depends_on "automake" => :build
@@ -15,10 +18,6 @@ class Valgrind < Formula
         if :arch == :x86 and Xcode.version >= "10.14.6" then
           odie "Valgrind cannot build in 32-bit using Xcode 10.14.6 or later"
         end
-      end
-
-      on_arm do
-        odie "Valgrind is currently incompatible with ARM-based Macs, see https://github.com/LouisBrunner/valgrind-macos/issues/56"
       end
     end
   end
